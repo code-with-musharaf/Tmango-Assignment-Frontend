@@ -1,32 +1,34 @@
 "use client";
 
+import { useAppSelector } from "@/hooks/useRedux";
 import { clsx } from "clsx";
 import { Flame, Bell, ChevronLeft, Info, Moon, Sun } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useAppDispatch } from "@/hooks/useRedux";
+import { setTheme as globalSetTheme } from "@/redux/slices/global.slice";
 
 export default function Navbar() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const defaultTheme = useAppSelector((state) => state.global.theme);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.documentElement.classList.toggle("dark", savedTheme === "dark");
+    if (defaultTheme) {
+      setTheme(defaultTheme);
+      document.documentElement.classList.toggle(
+        "dark",
+        defaultTheme === "dark",
+      );
     }
-  }, []);
+  }, [defaultTheme]);
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     document.documentElement.classList.toggle("dark", newTheme === "dark");
-    localStorage.setItem("theme", newTheme);
+    dispatch(globalSetTheme(newTheme as "light" | "dark"));
   };
-
-  useEffect(() => {
-    console.log({ theme });
-  }, [theme]);
 
   return (
     <div className="w-full border-b bg-white dark:bg-gray-900 dark:border-gray-800 transition-colors duration-300">
