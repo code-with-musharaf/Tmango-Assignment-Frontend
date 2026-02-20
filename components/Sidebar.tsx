@@ -99,7 +99,7 @@ export default function ChallengeSidebar() {
                     <Clock
                       className={clsx(
                         "w-5 h-5 text-gray-700 dark:text-gray-200",
-                        item.selected && "!text-yellow-500",
+                        item.selected && "!text-yellow-500 font-extrabold",
                       )}
                     />
                   )}
@@ -107,7 +107,7 @@ export default function ChallengeSidebar() {
                     className={clsx(
                       " font-medium",
                       theme === "light" ? "text-gray-700" : "text-gray-200",
-                      item.selected && "text-yellow-500",
+                      item.selected && "text-yellow-500 font-extrabold",
                     )}
                   >
                     Day - {item.day}
