@@ -88,18 +88,26 @@ export default function ChallengeSidebar() {
                 className={clsx(
                   "flex items-center justify-between px-5 py-3 rounded-full cursor-pointer transition-all duration-300",
                   item.selected
-                    ? "bg-white dark:bg-gray-700 shadow-md"
+                    ? theme === "light"
+                      ? "bg-white dark:bg-gray-700 shadow-md"
+                      : "bg-gray-700 dark:bg-white shadow-md"
                     : "hover:bg-white/40 dark:hover:bg-gray-700/40",
                 )}
               >
                 <div className="flex items-center gap-3">
                   {item.selected && (
-                    <Clock className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+                    <Clock
+                      className={clsx(
+                        "w-5 h-5 text-gray-700 dark:text-gray-200",
+                        item.selected && "!text-yellow-500",
+                      )}
+                    />
                   )}
                   <span
                     className={clsx(
                       " font-medium",
                       theme === "light" ? "text-gray-700" : "text-gray-200",
+                      item.selected && "text-yellow-500",
                     )}
                   >
                     Day - {item.day}
