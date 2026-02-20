@@ -1,7 +1,7 @@
 "use client";
 
 import { Lock, Clock, X, Menu } from "lucide-react";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import clsx from "clsx";
 import { useAppSelector } from "@/hooks/useRedux";
 
@@ -34,6 +34,7 @@ export default function ChallengeSidebar() {
       setTheme(defaultTheme);
     }
   }, [defaultTheme]);
+
   return (
     <>
       <button
@@ -55,9 +56,12 @@ export default function ChallengeSidebar() {
 
       <div
         className={clsx(
-          "fixed sm:static top-0 left-0 h-screen w-72 bg-gradient-to-b from-gray-200/40 to-gray-300/40 dark:from-gray-900 dark:to-gray-800 backdrop-blur-xl p-4 border-r border-gray-300 dark:border-gray-700 transition-transform duration-300 z-50",
+          "fixed sm:static top-0 left-0 h-screen w-72   backdrop-blur-xl p-4 border-r border-gray-300 dark:border-gray-700 transition-transform duration-300 z-50",
           isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
-          theme === "dark" ? "!bg-gray-900" : "!bg-gray-200",
+          "bg-gradient-to-b",
+          theme === "dark"
+            ? "from-gray-900 to-gray-800"
+            : "from-gray-200 to-gray-300",
         )}
       >
         {/* Close button (Mobile) */}
@@ -92,7 +96,12 @@ export default function ChallengeSidebar() {
                   {item.selected && (
                     <Clock className="w-5 h-5 text-gray-700 dark:text-gray-200" />
                   )}
-                  <span className="text-gray-700 dark:text-gray-200 font-medium">
+                  <span
+                    className={clsx(
+                      " font-medium",
+                      theme === "light" ? "text-gray-700" : "text-gray-200",
+                    )}
+                  >
                     Day - {item.day}
                   </span>
                 </div>
