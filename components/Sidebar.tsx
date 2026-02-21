@@ -9,39 +9,40 @@ interface DayItem {
   day: number;
   locked: boolean;
   completed: boolean;
+  selected: boolean;
 }
 
-const daysData: DayItem[] = [
-  { day: 1, locked: false, completed: true },
-  { day: 2, locked: true, completed: false },
-  { day: 3, locked: true, completed: false },
-  { day: 4, locked: true, completed: false },
-  { day: 5, locked: true, completed: false },
-  { day: 6, locked: true, completed: false },
-  { day: 7, locked: true, completed: false },
-  { day: 8, locked: true, completed: false },
-  { day: 9, locked: true, completed: false },
-  { day: 10, locked: true, completed: false },
-  { day: 11, locked: true, completed: false },
-  { day: 12, locked: true, completed: false },
-  { day: 13, locked: true, completed: false },
-  { day: 14, locked: true, completed: false },
-  { day: 15, locked: true, completed: false },
-  { day: 16, locked: true, completed: false },
-  { day: 17, locked: true, completed: false },
-  { day: 18, locked: true, completed: false },
-  { day: 19, locked: true, completed: false },
-  { day: 20, locked: true, completed: false },
-  { day: 21, locked: true, completed: false },
-  { day: 22, locked: true, completed: false },
-  { day: 23, locked: true, completed: false },
-  { day: 24, locked: true, completed: false },
-  { day: 25, locked: true, completed: false },
-  { day: 26, locked: true, completed: false },
-  { day: 27, locked: true, completed: false },
-  { day: 28, locked: true, completed: false },
-  { day: 29, locked: true, completed: false },
-  { day: 30, locked: true, completed: false },
+const initialDaysData: DayItem[] = [
+  { day: 1, locked: true, completed: false, selected: false },
+  { day: 2, locked: true, completed: false, selected: false },
+  { day: 3, locked: true, completed: false, selected: false },
+  { day: 4, locked: true, completed: false, selected: false },
+  { day: 5, locked: true, completed: false, selected: false },
+  { day: 6, locked: true, completed: false, selected: false },
+  { day: 7, locked: true, completed: false, selected: false },
+  { day: 8, locked: true, completed: false, selected: false },
+  { day: 9, locked: true, completed: false, selected: false },
+  { day: 10, locked: true, completed: false, selected: false },
+  { day: 11, locked: true, completed: false, selected: false },
+  { day: 12, locked: true, completed: false, selected: false },
+  { day: 13, locked: true, completed: false, selected: false },
+  { day: 14, locked: true, completed: false, selected: false },
+  { day: 15, locked: true, completed: false, selected: false },
+  { day: 16, locked: true, completed: false, selected: false },
+  { day: 17, locked: true, completed: false, selected: false },
+  { day: 18, locked: true, completed: false, selected: false },
+  { day: 19, locked: true, completed: false, selected: false },
+  { day: 20, locked: true, completed: false, selected: false },
+  { day: 21, locked: true, completed: false, selected: false },
+  { day: 22, locked: true, completed: false, selected: false },
+  { day: 23, locked: true, completed: false, selected: false },
+  { day: 24, locked: true, completed: false, selected: false },
+  { day: 25, locked: true, completed: false, selected: false },
+  { day: 26, locked: true, completed: false, selected: false },
+  { day: 27, locked: true, completed: false, selected: false },
+  { day: 28, locked: true, completed: false, selected: false },
+  { day: 29, locked: true, completed: false, selected: false },
+  { day: 30, locked: true, completed: false, selected: false },
 ];
 
 export default function ChallengeSidebar() {
@@ -49,11 +50,12 @@ export default function ChallengeSidebar() {
 
   const [activeDay, setActiveDay] = useState<number>(1);
   const [isOpen, setIsOpen] = useState(false);
+  const [daysData, setDayData] = useState<DayItem[]>(initialDaysData);
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const itemRefs = useRef<(HTMLDivElement | any | null)[]>([]);
 
-  // Scroll only sidebar
+  // Scroll sidebar
   useEffect(() => {
     const index = daysData.findIndex((d) => d.day === activeDay);
     const container = scrollRef.current;
@@ -67,6 +69,51 @@ export default function ChallengeSidebar() {
     }
   }, [activeDay]);
 
+  const handleUnlockDay = (completeDayCount: number) => {
+    const allDayData = daysData;
+    allDayData.forEach((item) => {
+      if (item.day <= completeDayCount) {
+        item.locked = false;
+        item.completed = true;
+      }
+    });
+    let completedDays: any = allDayData.filter((item) => {
+      return item.completed;
+    });
+    const nextDay = allDayData.find((item) => {
+      return item.day === completedDays.length + 1;
+    });
+    if (nextDay) {
+      nextDay.locked = false;
+      nextDay.selected = true;
+    }
+    const incompletedDays = allDayData
+      .filter((item) => {
+        return !item.completed;
+      })
+      .filter((item) => {
+        return item.day !== nextDay?.day;
+      });
+
+    if (completedDays.length > 2) {
+      completedDays = completedDays.slice(-2);
+    }
+
+    setDayData([...completedDays, nextDay, ...incompletedDays]);
+
+    // setDayData((prev) => {
+    //   return prev.map((item) => {
+    //     if (item.day <= completeDayCount + 1) {
+    //       return { ...item, locked: false };
+    //     }
+    //     return item;
+    //   });
+    // });
+  };
+
+  useEffect(() => {
+    handleUnlockDay(26);
+  }, []);
   return (
     <>
       {/* // Mobile hamburger  */}
