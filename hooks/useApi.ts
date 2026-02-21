@@ -76,10 +76,18 @@ export const useApi = () => {
     });
   };
 
+  const getSubmisionOfTheDay = async (dayCount: number) => {
+    const challengeId = `699989ed6c01db1dbc3fe6d4`;
+    return httpClient({
+      endPoint: `challenge/submission/${challengeId}/${dayCount}`,
+      method: "GET",
+    });
+  };
   return {
     login,
     getAllSubmission,
     cheChallengeJoinedOrnot,
     requestToJoinChallenge,
+    getSubmisionOfTheDay,
   };
 };
