@@ -48,7 +48,13 @@ const initialDaysData: DayItem[] = [
   { day: 30, locked: true, completed: false, selected: false },
 ];
 
-export default function ChallengeSidebar() {
+export default function ChallengeSidebar({
+  selectedDay,
+  setSelectedDay,
+}: {
+  selectedDay: number | null;
+  setSelectedDay: (day: number) => void;
+}) {
   const theme = useAppSelector((state) => state.global.theme);
   const { getAllSubmission } = useApi();
   const dispatch = useAppDispatch();

@@ -7,7 +7,13 @@ import PostCard from "./PostCard";
 import SharedHeader from "./SharedHeader";
 import PostCardSkeleton from "./PostCardSkeleton";
 
-export default function CheckInSection() {
+export default function CheckInSection({
+  selectedDay,
+  setSelectedDay,
+}: {
+  selectedDay: number | null;
+  setSelectedDay: (day: number) => void;
+}) {
   const { theme, loading } = useAppSelector((state) => state.global);
   const isDark = theme === "dark";
 
