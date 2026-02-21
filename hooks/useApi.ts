@@ -60,5 +60,26 @@ export const useApi = () => {
     });
   };
 
-  return { login, getAllSubmission };
+  const cheChallengeJoinedOrnot = async () => {
+    const challengeId = `699989ed6c01db1dbc3fe6d4`;
+    return httpClient({
+      endPoint: `challenge/joined/${challengeId}`,
+      method: "GET",
+    });
+  };
+
+  const requestToJoinChallenge = async () => {
+    const challengeId = `699989ed6c01db1dbc3fe6d4`;
+    return httpClient({
+      endPoint: `challenge/${challengeId}/join`,
+      method: "POST",
+    });
+  };
+
+  return {
+    login,
+    getAllSubmission,
+    cheChallengeJoinedOrnot,
+    requestToJoinChallenge,
+  };
 };

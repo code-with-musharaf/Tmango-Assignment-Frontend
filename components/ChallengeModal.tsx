@@ -1,24 +1,69 @@
 "use client";
 
+import { useApi } from "@/hooks/useApi";
 import { useAppSelector } from "@/hooks/useRedux";
 import clsx from "clsx";
-import { Play, X } from "lucide-react";
+import { Loader2, Play, X } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function ChallengeModal({ isOpen, onClose }: Props) {
+export default function ChallengeModal({ isOpen, onClose: closeModal }: Props) {
   const theme = useAppSelector((state) => state.global.theme);
+  const { cheChallengeJoinedOrnot, requestToJoinChallenge } = useApi();
   const isDark = theme === "dark";
 
+  const [isJoined, setIsJoined] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkChallengeJoinedOrNot = async () => {
+      try {
+        const response = await cheChallengeJoinedOrnot();
+        if (response) setIsJoined(response);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkChallengeJoinedOrNot();
+  }, []);
   if (!isOpen) return null;
+
+  const onClose = () => {
+    if (!isJoined) {
+      alert("Please join challenge");
+      return;
+    }
+    closeModal();
+  };
+  const joinChallenge = async () => {
+    if (loading) return;
+    setLoading(true);
+    if (isJoined) {
+      onClose();
+      return;
+    }
+    try {
+      const response = await requestToJoinChallenge();
+      if (response) {
+        setIsJoined(true);
+        closeModal();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-      {/* 🔹 Backdrop */}
       <div
         onClick={onClose}
         className={clsx(
@@ -27,7 +72,6 @@ export default function ChallengeModal({ isOpen, onClose }: Props) {
         )}
       />
 
-      {/* 🔹 Modal Container */}
       <div
         className={clsx(
           "relative w-full max-w-3xl rounded-3xl shadow-2xl transition-all duration-300 overflow-hidden",
@@ -36,7 +80,6 @@ export default function ChallengeModal({ isOpen, onClose }: Props) {
             : "bg-gradient-to-b from-white to-gray-100 text-gray-900",
         )}
       >
-        {/* 🔹 Close Button */}
         <button
           onClick={onClose}
           className={clsx(
@@ -56,7 +99,6 @@ export default function ChallengeModal({ isOpen, onClose }: Props) {
           />
         </button>
 
-        {/* 🔹 Image Section */}
         <div className="relative w-full h-56 sm:h-72 rounded-t-3xl overflow-hidden">
           <Image
             src="/assets/challenge_image.png"
@@ -66,7 +108,6 @@ export default function ChallengeModal({ isOpen, onClose }: Props) {
           />
         </div>
 
-        {/* 🔹 Content */}
         <div className="p-6 sm:p-8 space-y-6">
           {/* Title */}
           <h2 className="text-2xl sm:text-3xl font-bold">
@@ -88,7 +129,6 @@ export default function ChallengeModal({ isOpen, onClose }: Props) {
               <span className="font-medium opacity-80">9 checkins</span>
             </div>
 
-            {/* Divider */}
             <div
               className={clsx(
                 "hidden sm:block w-px h-6",
@@ -96,7 +136,6 @@ export default function ChallengeModal({ isOpen, onClose }: Props) {
               )}
             />
 
-            {/* Participants */}
             <div className="flex items-center gap-2">
               <div className="flex -space-x-3">
                 <Image
@@ -147,8 +186,17 @@ export default function ChallengeModal({ isOpen, onClose }: Props) {
                   ? "bg-yellow-600 hover:bg-yellow-500 text-white"
                   : "bg-yellow-600 hover:bg-yellow-700 text-white",
               )}
+              onClick={joinChallenge}
             >
-              Join Now
+              {loading ? (
+                <div className="flex justify-center items-center">
+                  <Loader2 className="animate-spin w-6 h-6" />
+                </div>
+              ) : isJoined ? (
+                "Already Joined"
+              ) : (
+                "Join Now"
+              )}
             </button>
           </div>
         </div>
