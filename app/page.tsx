@@ -1,9 +1,9 @@
-import LandingPage from "@/components/LandingPage";
+import AuthChecker from "./AuthChecker";
 
 export default function Home() {
   return (
     <>
-      <LandingPage />
+      <AuthChecker />
     </>
   );
 }
