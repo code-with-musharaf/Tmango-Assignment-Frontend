@@ -134,7 +134,7 @@ export default function ChallengeSidebar() {
       {/* // Desktop side bar  */}
       <div
         className={clsx(
-          "fixed sm:static top-0 left-0 h-screen w-[400px] border-r backdrop-blur-xl transition-transform duration-300 z-50",
+          "fixed sm:static top-0 left-0 min-h-screen w-[400px] border-r backdrop-blur-xl transition-transform duration-300 z-50",
           isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
           theme === "dark"
             ? "bg-gradient-to-b from-[#0f0f0f] via-[#111] to-[#0d0d0d] border-gray-800"
@@ -156,8 +156,6 @@ export default function ChallengeSidebar() {
           className="h-full overflow-y-auto px-4 py-6 space-y-5"
         >
           {daysData.map((item, index) => {
-            const isActive = activeDay === item.day;
-
             return (
               <div
                 key={item.day}
@@ -165,11 +163,11 @@ export default function ChallengeSidebar() {
                 onClick={() => !item.locked && setActiveDay(item.day)}
                 className={clsx(
                   "flex items-center justify-between px-6 py-4 rounded-full cursor-pointer transition-all duration-300",
-                  isActive &&
+                  item.selected &&
                     (theme === "dark"
                       ? "bg-black shadow-lg"
                       : "bg-white shadow-md"),
-                  !isActive &&
+                  !item.selected &&
                     (theme === "dark"
                       ? "hover:bg-white/5"
                       : "hover:bg-white/50"),
@@ -179,10 +177,10 @@ export default function ChallengeSidebar() {
                   className={clsx(
                     "text-lg font-medium tracking-wide",
                     theme === "dark"
-                      ? isActive
+                      ? item.selected
                         ? "text-white"
                         : "text-gray-400"
-                      : isActive
+                      : item.selected
                         ? "text-gray-900"
                         : "text-gray-600",
                   )}
