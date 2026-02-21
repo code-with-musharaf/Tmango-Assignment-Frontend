@@ -144,7 +144,7 @@ export default function ChallengeSidebar() {
       {/* // Mobile hamburger  */}
       <button
         onClick={() => setIsOpen(true)}
-        className="sm:hidden fixed top-24 left-3 z-50 p-2 rounded-full shadow-md bg-white dark:bg-gray-900"
+        className="sm:hidden fixed top-24 left-3 z-2 p-2 rounded-full shadow-md bg-white dark:bg-gray-900"
       >
         <Menu className="w-5 h-5 text-gray-800 dark:text-white" />
       </button>
@@ -159,7 +159,7 @@ export default function ChallengeSidebar() {
       {/* // Desktop side bar  */}
       <div
         className={clsx(
-          "fixed sm:static top-0 left-0 h-[100vh] overflow-auto w-[400px] border-r backdrop-blur-xl transition-transform duration-300 z-50",
+          "fixed sm:static top-0 left-0 h-[100vh] overflow-auto w-[400px] border-r backdrop-blur-xl transition-transform duration-300 z-2",
           isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
           theme === "dark"
             ? "bg-gradient-to-b from-[#0f0f0f] via-[#111] to-[#0d0d0d] border-gray-800"

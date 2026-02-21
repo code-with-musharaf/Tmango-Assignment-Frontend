@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { setTheme } from "@/redux/slices/global.slice";
 import CheckInSection from "./checkin/CheckinSection";
 import { useRouter } from "next/navigation";
+import ChallengeSidebar from "./Sidebar";
 
 const LandingPage = () => {
   const router = useRouter();
@@ -27,7 +28,10 @@ const LandingPage = () => {
   return (
     <>
       <ChallengeModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-      <CheckInSection />
+      <div className="flex">
+        <ChallengeSidebar />
+        <CheckInSection />
+      </div>
     </>
   );
 };

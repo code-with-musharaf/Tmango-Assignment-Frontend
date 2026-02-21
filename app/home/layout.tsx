@@ -12,8 +12,8 @@ export default function HomeLayout({
   return (
     <Providers>
       <Navbar />
-      <div className="flex">
-        <ChallengeSidebar />
+      <div>
+        {/* <ChallengeSidebar /> */}
         {children}
       </div>
     </Providers>
