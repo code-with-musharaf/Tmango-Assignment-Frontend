@@ -1,131 +1,143 @@
 "use client";
 
-import { Lock, Clock, X, Menu, Check } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Lock, Check, Menu, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { useAppSelector } from "@/hooks/useRedux";
-import Image from "next/image";
 
 interface DayItem {
   day: number;
   locked: boolean;
-  selected: boolean;
   completed: boolean;
 }
 
-const days: DayItem[] = [
-  { day: 1, locked: false, selected: true, completed: true },
-  { day: 2, locked: false, selected: false, completed: false },
-  { day: 3, locked: true, selected: false, completed: false },
-  { day: 4, locked: true, selected: false, completed: false },
-  { day: 5, locked: true, selected: false, completed: false },
-  { day: 6, locked: true, selected: false, completed: false },
-  { day: 7, locked: true, selected: false, completed: false },
-  { day: 8, locked: true, selected: false, completed: false },
-  { day: 9, locked: true, selected: false, completed: false },
+const daysData: DayItem[] = [
+  { day: 1, locked: false, completed: true },
+  { day: 2, locked: true, completed: false },
+  { day: 3, locked: true, completed: false },
+  { day: 4, locked: true, completed: false },
+  { day: 5, locked: true, completed: false },
+  { day: 6, locked: true, completed: false },
+  { day: 7, locked: true, completed: false },
+  { day: 8, locked: true, completed: false },
+  { day: 9, locked: true, completed: false },
 ];
 
 export default function ChallengeSidebar() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [activeDay, setActiveDay] = useState(1);
-  const [isOpen, setIsOpen] = useState(false);
-  const defaultTheme = useAppSelector((state) => state.global.theme);
+  const theme = useAppSelector((state) => state.global.theme);
 
+  const [activeDay, setActiveDay] = useState<number>(1);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const itemRefs = useRef<(HTMLDivElement | any | null)[]>([]);
+
+  // Scroll only sidebar
   useEffect(() => {
-    if (defaultTheme) {
-      setTheme(defaultTheme);
+    const index = daysData.findIndex((d) => d.day === activeDay);
+    const container = scrollRef.current;
+    const target = itemRefs.current[index];
+
+    if (container && target) {
+      container.scrollTo({
+        top: target.offsetTop - 120,
+        behavior: "smooth",
+      });
     }
-  }, [defaultTheme]);
+  }, [activeDay]);
 
   return (
     <>
+      {/* 🔹 Mobile Toggle */}
       <button
         onClick={() => setIsOpen(true)}
-        className="sm:hidden fixed top-30 left-0 z-50 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md"
+        className="sm:hidden fixed top-24 left-3 z-50 p-2 rounded-full shadow-md bg-white dark:bg-gray-900"
       >
-        <Menu
-          className="w-5 h-5"
-          color={theme === "light" ? "white" : "white"}
-        />
+        <Menu className="w-5 h-5 text-gray-800 dark:text-white" />
       </button>
 
+      {/* 🔹 Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-40 sm:hidden"
           onClick={() => setIsOpen(false)}
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 sm:hidden"
         />
       )}
 
+      {/* 🔹 Sidebar */}
       <div
         className={clsx(
-          "fixed sm:static top-0 left-0 h-screen w-72   backdrop-blur-xl p-4 border-r border-gray-300 dark:border-gray-700 transition-transform duration-300 z-50",
+          "fixed sm:static top-0 left-0 h-screen w-72 border-r backdrop-blur-xl transition-transform duration-300 z-50",
           isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
-          "bg-gradient-to-b",
           theme === "dark"
-            ? "from-gray-900 to-gray-800"
-            : "from-gray-200 to-gray-300",
+            ? "bg-gradient-to-b from-[#0f0f0f] via-[#111] to-[#0d0d0d] border-gray-800"
+            : "bg-gradient-to-b from-gray-200 via-gray-100 to-gray-200 border-gray-300",
         )}
       >
-        {/* Close button (Mobile) */}
-        <div className="flex justify-between items-center mb-6 sm:hidden">
+        {/* 🔹 Mobile Header */}
+        <div className="flex justify-between items-center px-4 py-5 sm:hidden">
           <h2 className="font-semibold text-gray-800 dark:text-white">
             Challenge Days
           </h2>
           <button onClick={() => setIsOpen(false)}>
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 text-gray-800 dark:text-white" />
           </button>
         </div>
 
-        <div className="space-y-4">
-          {days.map((item) => {
+        {/* 🔹 Scroll Container */}
+        <div
+          ref={scrollRef}
+          className="h-full overflow-y-auto px-4 py-6 space-y-5"
+        >
+          {daysData.map((item, index) => {
+            const isActive = activeDay === item.day;
+
             return (
               <div
                 key={item.day}
-                onClick={() => {
-                  if (!item.locked) {
-                    setActiveDay(item.day);
-                    setIsOpen(false);
-                  }
-                }}
+                ref={(el) => (itemRefs.current[index] = el) as any}
+                onClick={() => !item.locked && setActiveDay(item.day)}
                 className={clsx(
-                  "flex items-center justify-between px-5 py-3 rounded-full cursor-pointer transition-all duration-300",
-                  item.selected
-                    ? theme === "light"
-                      ? "bg-white dark:bg-gray-700 shadow-md"
-                      : "bg-gray-700 dark:bg-white shadow-md"
-                    : "hover:bg-white/40 dark:hover:bg-gray-700/40",
+                  "flex items-center justify-between px-6 py-4 rounded-full cursor-pointer transition-all duration-300",
+                  isActive &&
+                    (theme === "dark"
+                      ? "bg-black shadow-lg"
+                      : "bg-white shadow-md"),
+                  !isActive &&
+                    (theme === "dark"
+                      ? "hover:bg-white/5"
+                      : "hover:bg-white/50"),
                 )}
               >
-                <div className="flex items-center gap-3">
-                  {item.selected && (
-                    <Clock
-                      className={clsx(
-                        "w-5 h-5 text-gray-700 dark:text-gray-200",
-                        item.selected && "!text-yellow-500 font-extrabold",
-                      )}
-                    />
+                {/* Day Text */}
+                <span
+                  className={clsx(
+                    "text-lg font-medium tracking-wide",
+                    theme === "dark"
+                      ? isActive
+                        ? "text-white"
+                        : "text-gray-400"
+                      : isActive
+                        ? "text-gray-900"
+                        : "text-gray-600",
                   )}
-                  <span
-                    className={clsx(
-                      " font-medium",
-                      theme === "light" ? "text-gray-700" : "text-gray-200",
-                      item.selected && "text-yellow-500 font-extrabold",
-                    )}
-                  >
-                    Day - {item.day}
-                  </span>
-                </div>
+                >
+                  Day - {item.day}
+                </span>
 
-                {item.locked && (
-                  <Lock className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                )}
+                {/* Right Icon */}
                 {item.completed && (
-                  <Image
-                    src="/assets/complete_icon.png"
-                    alt="check"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5 text-gray-600 dark:text-gray-400"
+                  <div className="w-6 h-6 flex items-center justify-center rounded-full bg-green-500">
+                    <Check className="w-4 h-4 text-white" />
+                  </div>
+                )}
+
+                {item.locked && !item.completed && (
+                  <Lock
+                    className={clsx(
+                      "w-5 h-5",
+                      theme === "dark" ? "text-gray-500" : "text-gray-600",
+                    )}
                   />
                 )}
               </div>
