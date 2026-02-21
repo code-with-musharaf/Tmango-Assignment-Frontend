@@ -4,6 +4,7 @@ import { useAppDispatch } from "@/hooks/useRedux";
 import ChallengeModal from "./ChallengeModal";
 import { useEffect, useState } from "react";
 import { setTheme } from "@/redux/slices/global.slice";
+import CheckInSection from "./CheckinSection";
 
 const LandingPage = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -18,6 +19,7 @@ const LandingPage = () => {
   return (
     <>
       <ChallengeModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <CheckInSection />
     </>
   );
 };
