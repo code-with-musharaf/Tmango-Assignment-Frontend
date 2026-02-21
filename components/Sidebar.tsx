@@ -145,6 +145,26 @@ export default function ChallengeSidebar({
     fetchSubmissions();
   }, []);
 
+  const handleDayChange = (dayValue: number) => {
+    const chosenDay = daysData.find((item) => {
+      return item.day === dayValue;
+    });
+    if (chosenDay?.locked) {
+      return;
+    }
+    setActiveDay(dayValue);
+    setSelectedDay(dayValue);
+    setDayData((prev) => {
+      return prev
+        .map((item) => ({ ...item, selected: false }))
+        .map((item) => {
+          if (item.day === dayValue) {
+            return { ...item, selected: true };
+          }
+          return item;
+        });
+    });
+  };
   return (
     <>
       {/* // Mobile hamburger  */}
@@ -194,7 +214,7 @@ export default function ChallengeSidebar({
                 <div
                   key={item.day}
                   ref={(el) => (itemRefs.current[index] = el) as any}
-                  onClick={() => !item.locked && setActiveDay(item.day)}
+                  onClick={() => handleDayChange(item.day)}
                   className={clsx(
                     "flex items-center justify-between px-6 py-4 rounded-full cursor-pointer transition-all duration-300",
                     item.selected &&
