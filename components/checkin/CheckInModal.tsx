@@ -1,19 +1,19 @@
 "use client";
 
-import {
-  X,
-  Upload,
-  Image as ImageIcon,
-  Video,
-  Smile,
-  Play,
-  Pause,
-} from "lucide-react";
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import EmojiPicker, { Theme } from "emoji-picker-react";
 import { useAppSelector } from "@/hooks/useRedux";
 import clsx from "clsx";
+import EmojiPicker, { Theme } from "emoji-picker-react";
+import {
+  Image as ImageIcon,
+  Pause,
+  Play,
+  Smile,
+  Upload,
+  Video,
+  X,
+} from "lucide-react";
+import Image from "next/image";
+import { useRef, useState } from "react";
 
 interface Props {
   isOpen: boolean;

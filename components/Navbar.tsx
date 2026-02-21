@@ -4,12 +4,16 @@ import { useAppSelector, useAppDispatch } from "@/hooks/useRedux";
 import { setTheme as globalSetTheme } from "@/redux/slices/global.slice";
 import { Flame, Bell, ChevronLeft, Info, Moon, Sun } from "lucide-react";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
+import ChallengeDrawer from "./ChallengeDrawer";
 
 export default function Navbar() {
   const theme = useAppSelector((state) => state.global.theme);
   const dispatch = useAppDispatch();
+
+  const [showChallengeSideDrawer, setShowChallengeSideDrawer] =
+    useState<boolean>(false);
 
   const isDark = theme === "dark";
 
@@ -37,7 +41,10 @@ export default function Navbar() {
           : "bg-gradient-to-b from-gray-100 to-white border-gray-200",
       )}
     >
-      {/* 🔹 Top Row */}
+      <ChallengeDrawer
+        isOpen={showChallengeSideDrawer}
+        onClose={() => setShowChallengeSideDrawer(false)}
+      />
       <div className="flex items-center justify-between px-4 sm:px-6 py-4">
         {/* Logo */}
         <div className="flex items-center gap-2">
@@ -164,7 +171,9 @@ export default function Navbar() {
             className={clsx(
               "w-5 h-5",
               isDark ? "text-gray-400" : "text-gray-500",
+              "cursor-pointer",
             )}
+            onClick={() => setShowChallengeSideDrawer(true)}
           />
         </div>
       </div>
