@@ -13,7 +13,6 @@ const LandingPage = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   const dispatch = useAppDispatch();
-  const token = localStorage.getItem("token") ?? null;
 
   useEffect(() => {
     const theme = localStorage.getItem("theme") ?? null;
@@ -21,10 +20,11 @@ const LandingPage = () => {
   }, []);
 
   useEffect(() => {
+    const token = localStorage.getItem("token") ?? null;
     if (!token) {
       router.push("/auth");
     }
-  }, [token]);
+  }, []);
   return (
     <>
       <ChallengeModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
