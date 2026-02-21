@@ -32,10 +32,6 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "auto";
-  }, [isOpen]);
-
   if (!isOpen) return null;
 
   const handleFile = (file: File) => {
@@ -85,6 +81,7 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
           className={clsx(
             "absolute top-5 right-5 p-3 rounded-full",
             isDark ? "bg-white/10" : "bg-gray-200",
+            "cursor-pointer",
           )}
         >
           <X />
@@ -93,14 +90,14 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
         {/* Profile */}
         <div className="flex items-center gap-4">
           <Image
-            src="/assets/profile.png"
+            src="/assets/profile.jpg"
             alt="user"
             width={70}
             height={70}
             className="rounded-full"
           />
           <div>
-            <h3 className="text-xl font-semibold">Ashraf Idrishi</h3>
+            <h3 className="text-xl font-semibold">Musharaf Haque</h3>
             {!text && (
               <p className="opacity-60 mt-1">What did you complete today?</p>
             )}
@@ -218,7 +215,7 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
 
         {/* Emoji Picker */}
         {showEmoji && (
-          <div className="mt-4">
+          <div className="mt-4 absolute bottom-20 left-20">
             <EmojiPicker
               theme={isDark ? Theme.DARK : Theme.LIGHT}
               onEmojiClick={(emojiData) =>
