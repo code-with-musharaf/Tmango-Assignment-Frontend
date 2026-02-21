@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { useAppSelector } from "@/hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { useApi } from "@/hooks/useApi";
+import { setUserDetails } from "@/redux/slices/global.slice";
 
 export default function SimpleAuth() {
   const router = useRouter();
-  const theme = useAppSelector((state) => state.global.theme);
+  const { theme } = useAppSelector((state) => state.global);
+  const dispatch = useAppDispatch();
   const { login } = useApi();
 
   const isDark = theme === "dark";
@@ -44,6 +46,8 @@ export default function SimpleAuth() {
       console.log(resp);
       if (!!resp.token) {
         localStorage.setItem("token", resp.token);
+        localStorage.setItem("userDetails", JSON.stringify(resp.user));
+        dispatch(setUserDetails(resp.user));
         router.push("/");
       }
     } catch (err) {
