@@ -6,7 +6,7 @@ interface IOptions {
   data?: any;
 }
 
-// export const baseURL = "http://192.168.0.109:2854/api/v1";
+// export const baseURL = "pretty-harmony-production-f2d6.up.railway.app/api";
 export const baseURL = "http://192.168.0.107:8080/api";
 export const useApi = () => {
   const httpClient = async ({ method, endPoint, data }: IOptions) => {
