@@ -1,9 +1,9 @@
 "use client";
 
-import { X, Play } from "lucide-react";
-import Image from "next/image";
-import { useEffect } from "react";
+import { useAppSelector } from "@/hooks/useRedux";
 import clsx from "clsx";
+import { Play, X } from "lucide-react";
+import Image from "next/image";
 
 interface Props {
   isOpen: boolean;
@@ -11,95 +11,117 @@ interface Props {
 }
 
 export default function ChallengeModal({ isOpen, onClose }: Props) {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [isOpen]);
+  const theme = useAppSelector((state) => state.global.theme);
+  const isDark = theme === "dark";
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+      {/* 🔹 Backdrop */}
       <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-md transition-opacity"
         onClick={onClose}
+        className={clsx(
+          "absolute inset-0 backdrop-blur-md transition-all duration-300",
+          isDark ? "bg-black/70" : "bg-black/30",
+        )}
       />
 
+      {/* 🔹 Modal Container */}
       <div
         className={clsx(
-          "relative w-full max-w-3xl rounded-3xl shadow-2xl",
-          "bg-white dark:bg-gray-900",
-          "transition-all duration-300",
+          "relative w-full max-w-3xl rounded-3xl shadow-2xl transition-all duration-300 overflow-hidden",
+          isDark
+            ? "bg-gradient-to-b from-[#1a1a1f] to-[#111111] text-white shadow-black/50"
+            : "bg-gradient-to-b from-white to-gray-100 text-gray-900",
         )}
       >
+        {/* 🔹 Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:scale-105 transition"
+          className={clsx(
+            "absolute top-5 right-5 p-3 rounded-full transition z-10",
+            isDark
+              ? "bg-white/10 hover:bg-white/20"
+              : "bg-gray-200 hover:bg-gray-300",
+          )}
         >
-          <X className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+          <X
+            className={clsx(
+              "w-5 h-5",
+              isDark ? "text-white" : "text-gray-700",
+              "cursor-pointer",
+            )}
+            onClick={onClose}
+          />
         </button>
 
+        {/* 🔹 Image Section */}
         <div className="relative w-full h-56 sm:h-72 rounded-t-3xl overflow-hidden">
           <Image
-            src="/fitness.jpg"
+            src="/assets/challenge_image.png"
             alt="Fitness"
             fill
             className="object-cover"
           />
         </div>
 
+        {/* 🔹 Content */}
         <div className="p-6 sm:p-8 space-y-6">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+          {/* Title */}
+          <h2 className="text-2xl sm:text-3xl font-bold">
             9-Day Fitness Challenge
           </h2>
 
-          <div className="flex flex-wrap items-center gap-4 text-gray-600 dark:text-gray-300">
+          {/* Stats Row */}
+          <div className="flex flex-wrap items-center gap-4">
+            {/* Checkins */}
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full border border-yellow-500 flex items-center justify-center">
-                <Play className="w-4 h-4 text-yellow-600" />
+              <div
+                className={clsx(
+                  "w-10 h-10 rounded-full flex items-center justify-center border",
+                  isDark ? "border-yellow-500" : "border-yellow-600",
+                )}
+              >
+                <Play className="w-4 h-4 text-yellow-500" />
               </div>
-              <span className="font-medium">9 checkins</span>
+              <span className="font-medium opacity-80">9 checkins</span>
             </div>
 
-            <div className="hidden sm:block w-px h-6 bg-gray-300 dark:bg-gray-700" />
+            {/* Divider */}
+            <div
+              className={clsx(
+                "hidden sm:block w-px h-6",
+                isDark ? "bg-white/20" : "bg-gray-300",
+              )}
+            />
 
+            {/* Participants */}
             <div className="flex items-center gap-2">
               <div className="flex -space-x-3">
                 <Image
-                  src="/avatar1.jpg"
-                  alt="avatar"
-                  width={32}
-                  height={32}
-                  className="rounded-full border-2 border-white dark:border-gray-900"
-                />
-                <Image
-                  src="/avatar2.jpg"
-                  alt="avatar"
-                  width={32}
-                  height={32}
-                  className="rounded-full border-2 border-white dark:border-gray-900"
-                />
-                <Image
-                  src="/avatar3.jpg"
-                  alt="avatar"
-                  width={32}
-                  height={32}
-                  className="rounded-full border-2 border-white dark:border-gray-900"
+                  src="/assets/profiles.png"
+                  alt="participants"
+                  width={104}
+                  height={40}
+                  className="rounded-full"
                 />
               </div>
-              <span className="font-medium">+75 participants joined</span>
+              <span className="font-medium opacity-80">
+                +75 participants joined
+              </span>
             </div>
           </div>
 
           {/* Description */}
           <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Description
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm sm:text-base">
+            <h3 className="text-lg font-semibold">Description</h3>
+            <p
+              className={clsx(
+                "leading-relaxed text-sm sm:text-base",
+                isDark ? "text-gray-300" : "text-gray-600",
+              )}
+            >
               This 9-day fitness challenge is designed to help you build
               consistency, boost energy, and feel stronger—one day at a time.
               Each day comes with a simple, achievable fitness task that fits
@@ -108,12 +130,24 @@ export default function ChallengeModal({ isOpen, onClose }: Props) {
           </div>
 
           {/* CTA */}
-          <div className="pt-2">
-            <p className="text-center text-gray-700 dark:text-gray-300 mb-4">
+          <div className="pt-4">
+            <p
+              className={clsx(
+                "text-center mb-4",
+                isDark ? "text-gray-300" : "text-gray-700",
+              )}
+            >
               Join the challenge and start your journey
             </p>
 
-            <button className="w-full py-3 rounded-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold transition">
+            <button
+              className={clsx(
+                "w-full py-3 rounded-full font-semibold transition",
+                isDark
+                  ? "bg-yellow-600 hover:bg-yellow-500 text-white"
+                  : "bg-yellow-600 hover:bg-yellow-700 text-white",
+              )}
+            >
               Join Now
             </button>
           </div>
