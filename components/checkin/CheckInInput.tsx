@@ -24,7 +24,7 @@ export default function CheckInInput() {
         }`}
       >
         <Image
-          src="/assets/profile.png"
+          src="/assets/profile.jpg"
           alt="user"
           width={40}
           height={40}

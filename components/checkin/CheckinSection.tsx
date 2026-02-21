@@ -2,8 +2,9 @@
 
 import { useAppSelector } from "@/hooks/useRedux";
 import CheckInInput from "./CheckInInput";
-import SharedHeader from "./SharedHeader";
+
 import PostCard from "./PostCard";
+import SharedHeader from "./SharedHeader";
 
 export default function CheckInSection() {
   const theme = useAppSelector((state) => state.global.theme);

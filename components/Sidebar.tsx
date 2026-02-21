@@ -48,7 +48,7 @@ export default function ChallengeSidebar() {
 
   return (
     <>
-      {/* 🔹 Mobile Toggle */}
+      {/* // Mobile hamburger  */}
       <button
         onClick={() => setIsOpen(true)}
         className="sm:hidden fixed top-24 left-3 z-50 p-2 rounded-full shadow-md bg-white dark:bg-gray-900"
@@ -56,7 +56,6 @@ export default function ChallengeSidebar() {
         <Menu className="w-5 h-5 text-gray-800 dark:text-white" />
       </button>
 
-      {/* 🔹 Overlay */}
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
@@ -64,17 +63,16 @@ export default function ChallengeSidebar() {
         />
       )}
 
-      {/* 🔹 Sidebar */}
+      {/* // Desktop side bar  */}
       <div
         className={clsx(
-          "fixed sm:static top-0 left-0 h-screen w-72 border-r backdrop-blur-xl transition-transform duration-300 z-50",
+          "fixed sm:static top-0 left-0 h-screen w-[400px] border-r backdrop-blur-xl transition-transform duration-300 z-50",
           isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
           theme === "dark"
             ? "bg-gradient-to-b from-[#0f0f0f] via-[#111] to-[#0d0d0d] border-gray-800"
             : "bg-gradient-to-b from-gray-200 via-gray-100 to-gray-200 border-gray-300",
         )}
       >
-        {/* 🔹 Mobile Header */}
         <div className="flex justify-between items-center px-4 py-5 sm:hidden">
           <h2 className="font-semibold text-gray-800 dark:text-white">
             Challenge Days
@@ -84,7 +82,7 @@ export default function ChallengeSidebar() {
           </button>
         </div>
 
-        {/* 🔹 Scroll Container */}
+        {/* // scroll section  */}
         <div
           ref={scrollRef}
           className="h-full overflow-y-auto px-4 py-6 space-y-5"
@@ -109,7 +107,6 @@ export default function ChallengeSidebar() {
                       : "hover:bg-white/50"),
                 )}
               >
-                {/* Day Text */}
                 <span
                   className={clsx(
                     "text-lg font-medium tracking-wide",
