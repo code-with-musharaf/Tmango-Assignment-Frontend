@@ -4,6 +4,7 @@ import { useAppSelector } from "@/hooks/useRedux";
 import Image from "next/image";
 import { useState } from "react";
 import CheckInModal from "./CheckInModal";
+import CheckinCountDown from "./CheckinCountDown";
 
 export default function CheckInInput() {
   const theme = useAppSelector((state) => state.global.theme);
@@ -18,12 +19,13 @@ export default function CheckInInput() {
           onClose={() => setShowCheckInModal(false)}
         />
       )}
-      <div className="flex items-center justify-center gap-3">
+      <CheckinCountDown />
+      {/* <div className="flex items-center justify-center gap-3">
         <h2 className="text-lg font-semibold">Today's check-in</h2>
         <span className="px-3 py-1 text-xs bg-red-500 text-white rounded-full">
           Ends in 20h 44m
         </span>
-      </div>
+      </div> */}
 
       <div
         className={`flex items-center gap-4 px-4 py-3 rounded-full border transition ${
