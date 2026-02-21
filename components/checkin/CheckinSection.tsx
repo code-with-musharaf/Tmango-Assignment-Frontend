@@ -5,9 +5,10 @@ import CheckInInput from "./CheckInInput";
 
 import PostCard from "./PostCard";
 import SharedHeader from "./SharedHeader";
+import PostCardSkeleton from "./PostCardSkeleton";
 
 export default function CheckInSection() {
-  const theme = useAppSelector((state) => state.global.theme);
+  const { theme, loading } = useAppSelector((state) => state.global);
   const isDark = theme === "dark";
 
   return (
@@ -30,10 +31,14 @@ export default function CheckInSection() {
         >
           <SharedHeader />
 
-          <div className="mt-6 space-y-6">
-            <PostCard pinned />
-            <PostCard />
-          </div>
+          {loading ? (
+            <PostCardSkeleton count={2} />
+          ) : (
+            <div className="mt-6 space-y-6">
+              <PostCard />
+              <PostCard pinned />
+            </div>
+          )}
         </div>
       </div>
     </div>

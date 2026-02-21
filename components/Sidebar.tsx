@@ -3,7 +3,10 @@
 import { Lock, Check, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { useAppSelector } from "@/hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
+import { useApi } from "@/hooks/useApi";
+import { setGlobalLoading } from "@/redux/slices/global.slice";
+import SidebarSkeleton from "./SidebarSkeleton";
 
 interface DayItem {
   day: number;
@@ -47,10 +50,13 @@ const initialDaysData: DayItem[] = [
 
 export default function ChallengeSidebar() {
   const theme = useAppSelector((state) => state.global.theme);
+  const { getAllSubmission } = useApi();
+  const dispatch = useAppDispatch();
 
   const [activeDay, setActiveDay] = useState<number>(1);
   const [isOpen, setIsOpen] = useState(false);
   const [daysData, setDayData] = useState<DayItem[]>(initialDaysData);
+  const [loading, setLoading] = useState(true);
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const itemRefs = useRef<(HTMLDivElement | any | null)[]>([]);
@@ -111,9 +117,28 @@ export default function ChallengeSidebar() {
     // });
   };
 
+  const fetchSubmissions = async () => {
+    try {
+      dispatch(setGlobalLoading(true));
+      const resp = await getAllSubmission();
+      if (resp?.length > 0) {
+        const lastSubmissionDayCount = resp?.[0]?.dayCount;
+        handleUnlockDay(lastSubmissionDayCount);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        dispatch(setGlobalLoading(false));
+      }, 4000);
+    }
+  };
+
   useEffect(() => {
-    handleUnlockDay(26);
+    fetchSubmissions();
   }, []);
+
   return (
     <>
       {/* // Mobile hamburger  */}
@@ -134,7 +159,7 @@ export default function ChallengeSidebar() {
       {/* // Desktop side bar  */}
       <div
         className={clsx(
-          "fixed sm:static top-0 left-0 min-h-screen w-[400px] border-r backdrop-blur-xl transition-transform duration-300 z-50",
+          "fixed sm:static top-0 left-0 h-[100vh] overflow-auto w-[400px] border-r backdrop-blur-xl transition-transform duration-300 z-50",
           isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
           theme === "dark"
             ? "bg-gradient-to-b from-[#0f0f0f] via-[#111] to-[#0d0d0d] border-gray-800"
@@ -155,57 +180,61 @@ export default function ChallengeSidebar() {
           ref={scrollRef}
           className="h-full overflow-y-auto px-4 py-6 space-y-5"
         >
-          {daysData.map((item, index) => {
-            return (
-              <div
-                key={item.day}
-                ref={(el) => (itemRefs.current[index] = el) as any}
-                onClick={() => !item.locked && setActiveDay(item.day)}
-                className={clsx(
-                  "flex items-center justify-between px-6 py-4 rounded-full cursor-pointer transition-all duration-300",
-                  item.selected &&
-                    (theme === "dark"
-                      ? "bg-black shadow-lg"
-                      : "bg-white shadow-md"),
-                  !item.selected &&
-                    (theme === "dark"
-                      ? "hover:bg-white/5"
-                      : "hover:bg-white/50"),
-                )}
-              >
-                <span
+          {loading ? (
+            <SidebarSkeleton count={12} />
+          ) : (
+            daysData.map((item, index) => {
+              return (
+                <div
+                  key={item.day}
+                  ref={(el) => (itemRefs.current[index] = el) as any}
+                  onClick={() => !item.locked && setActiveDay(item.day)}
                   className={clsx(
-                    "text-lg font-medium tracking-wide",
-                    theme === "dark"
-                      ? item.selected
-                        ? "text-white"
-                        : "text-gray-400"
-                      : item.selected
-                        ? "text-gray-900"
-                        : "text-gray-600",
+                    "flex items-center justify-between px-6 py-4 rounded-full cursor-pointer transition-all duration-300",
+                    item.selected &&
+                      (theme === "dark"
+                        ? "bg-black shadow-lg"
+                        : "bg-white shadow-md"),
+                    !item.selected &&
+                      (theme === "dark"
+                        ? "hover:bg-white/5"
+                        : "hover:bg-white/50"),
                   )}
                 >
-                  Day - {item.day}
-                </span>
-
-                {/* Right Icon */}
-                {item.completed && (
-                  <div className="w-6 h-6 flex items-center justify-center rounded-full bg-green-500">
-                    <Check className="w-4 h-4 text-white" />
-                  </div>
-                )}
-
-                {item.locked && !item.completed && (
-                  <Lock
+                  <span
                     className={clsx(
-                      "w-5 h-5",
-                      theme === "dark" ? "text-gray-500" : "text-gray-600",
+                      "text-lg font-medium tracking-wide",
+                      theme === "dark"
+                        ? item.selected
+                          ? "text-white"
+                          : "text-gray-400"
+                        : item.selected
+                          ? "text-gray-900"
+                          : "text-gray-600",
                     )}
-                  />
-                )}
-              </div>
-            );
-          })}
+                  >
+                    Day - {item.day}
+                  </span>
+
+                  {/* Right Icon */}
+                  {item.completed && (
+                    <div className="w-6 h-6 flex items-center justify-center rounded-full bg-green-500">
+                      <Check className="w-4 h-4 text-white" />
+                    </div>
+                  )}
+
+                  {item.locked && !item.completed && (
+                    <Lock
+                      className={clsx(
+                        "w-5 h-5",
+                        theme === "dark" ? "text-gray-500" : "text-gray-600",
+                      )}
+                    />
+                  )}
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
     </>

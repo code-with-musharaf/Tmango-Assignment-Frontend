@@ -5,8 +5,9 @@ interface IOptions {
   endPoint: string;
   data?: any;
 }
+
 // export const baseURL = "http://192.168.0.109:2854/api/v1";
-export const baseURL = "https://back-production-6491.up.railway.app/api/v1";
+export const baseURL = "http://192.168.0.107:8080/api";
 export const useApi = () => {
   const httpClient = async ({ method, endPoint, data }: IOptions) => {
     const token = localStorage.getItem("token") ?? "";
@@ -22,7 +23,6 @@ export const useApi = () => {
       });
       return response.data;
     } catch (err: any) {
-      // If it's an axios error we can inspect response
       if (axios.isAxiosError(err)) {
         const status = err?.response?.status;
         const serverData = err?.response?.data;
@@ -32,7 +32,6 @@ export const useApi = () => {
           err?.message ??
           "Request failed";
 
-        // return a normalized failure object (or throw)
         return Promise.reject({
           isApiError: true,
           status,
@@ -45,13 +44,21 @@ export const useApi = () => {
     }
   };
 
-  const updateTenant = async (data: any, tenantId: string) => {
+  const login = async (data: { name: string; email: string }) => {
     return httpClient({
-      endPoint: `tenant/update/${tenantId}`,
-      method: "PUT",
+      endPoint: "auth",
+      method: "POST",
       data,
     });
   };
 
-  return {};
+  const getAllSubmission = async () => {
+    const challengeId = `699989ed6c01db1dbc3fe6d4`;
+    return httpClient({
+      endPoint: `challenge/submission/${challengeId}`,
+      method: "GET",
+    });
+  };
+
+  return { login, getAllSubmission };
 };

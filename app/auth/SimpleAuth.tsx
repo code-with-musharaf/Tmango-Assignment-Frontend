@@ -5,12 +5,14 @@ import { Loader2 } from "lucide-react";
 import { useAppSelector } from "@/hooks/useRedux";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
+import { useApi } from "@/hooks/useApi";
 
 export default function SimpleAuth() {
   const router = useRouter();
   const theme = useAppSelector((state) => state.global.theme);
-  const isDark = theme === "dark";
+  const { login } = useApi();
 
+  const isDark = theme === "dark";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
@@ -34,16 +36,21 @@ export default function SimpleAuth() {
   };
 
   const handleLogin = async () => {
-    if (!validate()) return;
+    try {
+      if (!validate()) return;
 
-    setLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
+      setLoading(true);
+      const resp = await login({ name, email });
+      console.log(resp);
+      if (!!resp.token) {
+        localStorage.setItem("token", resp.token);
+        router.push("/");
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
       setLoading(false);
-      localStorage.setItem("token", "token");
-      router.push("/");
-    }, 2000);
+    }
   };
 
   return (
