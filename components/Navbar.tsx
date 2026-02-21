@@ -136,7 +136,7 @@ export default function Navbar() {
         )}
       >
         {/* Left */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-6 justify-end md:justify-start">
           <div
             className={clsx(
               "flex items-center gap-2 cursor-pointer transition",
@@ -155,18 +155,18 @@ export default function Navbar() {
               isDark ? "text-white" : "text-gray-900",
             )}
           >
-            Day 1 of 9
+            Day 1 of 30
           </div>
         </div>
 
         {/* Right */}
         <div
           className={clsx(
-            "flex items-center gap-2 font-semibold",
+            "flex items-center gap-2 font-semibold justify-end md:justify-start",
             isDark ? "text-white" : "text-gray-900",
           )}
         >
-          <span>9-Day Fitness Challenge</span>
+          <span>30-Days Fitness Challenge</span>
           <Info
             className={clsx(
               "w-5 h-5",
