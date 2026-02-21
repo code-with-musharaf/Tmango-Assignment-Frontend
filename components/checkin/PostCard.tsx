@@ -30,7 +30,7 @@ export default function PostCard({ pinned }: Props) {
       <div className="flex justify-between items-start">
         <div className="flex gap-3">
           <Image
-            src="/assets/profile.png"
+            src="/assets/profile.jpg"
             alt="user"
             width={45}
             height={45}
