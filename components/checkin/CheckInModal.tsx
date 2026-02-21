@@ -13,7 +13,7 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Props {
   isOpen: boolean;
@@ -29,16 +29,69 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
   const [preview, setPreview] = useState<string | null>(null);
   const [showEmoji, setShowEmoji] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-
+  const [base64, setBase64] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
-  const handleFile = (file: File) => {
-    setMedia(file);
-    setPreview(URL.createObjectURL(file));
-  };
+  // const handleFile = (file: File) => {
+  //   setMedia(file);
+  //   setPreview(URL.createObjectURL(file));
+  //   const reader = new FileReader();
+  //   reader.onload = (e) => {
+  //     if (e.target?.result) {
+  //       setBase64(e.target.result as string);
+  //     }
+  //   };
+  //   reader.readAsDataURL(file);
+  // };
 
+  const MAX_VIDEO_SIZE = 10 * 1024 * 1024; // 10MB
+  const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+
+  const handleFile = (file: File) => {
+    if (!file) return;
+
+    // Reset previous error
+    setError(null);
+
+    // Validate video size
+    if (file.type.startsWith("video/")) {
+      if (file.size > MAX_VIDEO_SIZE) {
+        setError("Video size must be less than 10MB.");
+        return;
+      }
+    }
+
+    // Validate image size
+    if (file.type.startsWith("image/")) {
+      if (file.size > MAX_IMAGE_SIZE) {
+        setError("Image size must be less than 5MB.");
+        return;
+      }
+    }
+
+    // Set preview using object URL (safe for large files)
+    const previewUrl = URL.createObjectURL(file);
+    setMedia(file);
+    setPreview(previewUrl);
+
+    // Only convert small images to base64 (avoid video base64)
+    if (file.type.startsWith("image/")) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        if (e.target?.result) {
+          setBase64(e.target.result as string);
+        }
+      };
+
+      reader.readAsDataURL(file);
+    } else {
+      setBase64(null); // never convert video to base64
+    }
+  };
   const toggleVideo = () => {
     if (!videoRef.current) return;
 
@@ -129,29 +182,37 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
             <p className="font-medium">Upload</p>
             <span className="text-sm opacity-60 text-center px-6">
               Images/Videos should be horizontal, at least 1280×720px. Max size
-              2MB.
+              10MB.
             </span>
 
             <input
               type="file"
               hidden
               accept="image/*,video/*"
-              onChange={(e) => e.target.files && handleFile(e.target.files[0])}
+              onChange={(e) => {
+                setError(null);
+                e.target.files && handleFile(e.target.files[0]);
+              }}
             />
           </label>
         )}
+        {!!error && <p className="text-red-500">{error}</p>}
 
         {/* Preview */}
         {preview && (
           <div
             className={clsx(
-              "mt-6 relative rounded-2xl overflow-hidden border",
+              "mt-6 relative rounded-2xl overflow-hidden border max-h-[500px]",
               isDark ? "border-white/10" : "border-gray-200",
             )}
           >
             {isVideo ? (
               <>
-                <video ref={videoRef} src={preview} className="w-full h-auto" />
+                <video
+                  ref={videoRef}
+                  src={preview}
+                  className="w-full h-auto object-cover"
+                />
                 <button
                   onClick={toggleVideo}
                   className="absolute inset-0 flex items-center justify-center"
