@@ -1,26 +1,28 @@
 "use client";
 
-import { Lock, Clock, X, Menu } from "lucide-react";
-import { use, useEffect, useState } from "react";
+import { Lock, Clock, X, Menu, Check } from "lucide-react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { useAppSelector } from "@/hooks/useRedux";
+import Image from "next/image";
 
 interface DayItem {
   day: number;
   locked: boolean;
   selected: boolean;
+  completed: boolean;
 }
 
 const days: DayItem[] = [
-  { day: 1, locked: false, selected: true },
-  { day: 2, locked: false, selected: false },
-  { day: 3, locked: true, selected: false },
-  { day: 4, locked: true, selected: false },
-  { day: 5, locked: true, selected: false },
-  { day: 6, locked: true, selected: false },
-  { day: 7, locked: true, selected: false },
-  { day: 8, locked: true, selected: false },
-  { day: 9, locked: true, selected: false },
+  { day: 1, locked: false, selected: true, completed: true },
+  { day: 2, locked: false, selected: false, completed: false },
+  { day: 3, locked: true, selected: false, completed: false },
+  { day: 4, locked: true, selected: false, completed: false },
+  { day: 5, locked: true, selected: false, completed: false },
+  { day: 6, locked: true, selected: false, completed: false },
+  { day: 7, locked: true, selected: false, completed: false },
+  { day: 8, locked: true, selected: false, completed: false },
+  { day: 9, locked: true, selected: false, completed: false },
 ];
 
 export default function ChallengeSidebar() {
@@ -116,6 +118,15 @@ export default function ChallengeSidebar() {
 
                 {item.locked && (
                   <Lock className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                )}
+                {item.completed && (
+                  <Image
+                    src="/assets/complete_icon.png"
+                    alt="check"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 text-gray-600 dark:text-gray-400"
+                  />
                 )}
               </div>
             );
