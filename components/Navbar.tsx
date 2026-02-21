@@ -7,29 +7,42 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import ChallengeDrawer from "./ChallengeDrawer";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const theme = useAppSelector((state) => state.global.theme);
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const [showChallengeSideDrawer, setShowChallengeSideDrawer] =
     useState<boolean>(false);
 
+  const [showProfileMenu, setShowProfileMenu] = useState<boolean>(false);
+
   const isDark = theme === "dark";
 
-  // 🔥 Apply dark class properly to html
   useEffect(() => {
-    const root = document.documentElement;
+    const handleClickOutside = () => {
+      setShowProfileMenu(false);
+    };
 
-    if (isDark) {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
+    if (showProfileMenu) {
+      document.addEventListener("click", handleClickOutside);
     }
-  }, [isDark]);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [showProfileMenu]);
 
   const toggleTheme = () => {
     dispatch(globalSetTheme(isDark ? "light" : "dark"));
+  };
+
+  const handleLogout = () => {
+    setShowProfileMenu(false);
+    localStorage.removeItem("token");
+    router.push("/auth");
   };
 
   return (
@@ -45,6 +58,8 @@ export default function Navbar() {
         isOpen={showChallengeSideDrawer}
         onClose={() => setShowChallengeSideDrawer(false)}
       />
+
+      {/* Top Row */}
       <div className="flex items-center justify-between px-4 sm:px-6 py-4">
         {/* Logo */}
         <div className="flex items-center gap-2">
@@ -110,32 +125,59 @@ export default function Navbar() {
             />
           </div>
 
-          {/* Avatar */}
-          <div
-            className={clsx(
-              "w-9 h-9 rounded-full overflow-hidden border",
-              isDark ? "border-white/20" : "border-gray-300",
+          {/* Avatar + Logout */}
+          <div className="relative">
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowProfileMenu((prev) => !prev);
+              }}
+              className={clsx(
+                "w-9 h-9 rounded-full overflow-hidden border cursor-pointer",
+                isDark ? "border-white/20" : "border-gray-300",
+              )}
+            >
+              <Image
+                src="/assets/profile.jpg"
+                alt="Profile"
+                width={36}
+                height={36}
+                className="object-cover"
+              />
+            </div>
+
+            {showProfileMenu && (
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className={clsx(
+                  "absolute right-0 mt-3 w-40 rounded-xl shadow-lg border z-50 transition",
+                  isDark
+                    ? "bg-[#1c1c22] border-white/10 text-white"
+                    : "bg-white border-gray-200 text-gray-900",
+                )}
+              >
+                <button
+                  onClick={handleLogout}
+                  className={clsx(
+                    "w-full text-left px-4 py-3 rounded-xl transition cursor-pointer hover:bg-gray-100 text-red-600",
+                    isDark ? "hover:bg-white/10" : "hover:bg-gray-100",
+                  )}
+                >
+                  Logout
+                </button>
+              </div>
             )}
-          >
-            <Image
-              src="/assets/profile.jpg"
-              alt="Profile"
-              width={36}
-              height={36}
-              className="object-cover"
-            />
           </div>
         </div>
       </div>
 
-      {/* 🔹 Bottom Row */}
+      {/* Bottom Row */}
       <div
         className={clsx(
           "flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 sm:px-6 py-4 transition-colors duration-300",
           isDark ? "bg-[#121217]" : "bg-gray-50",
         )}
       >
-        {/* Left */}
         <div className="flex items-center gap-6 justify-end md:justify-start">
           <div
             className={clsx(
@@ -159,7 +201,6 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Right */}
         <div
           className={clsx(
             "flex items-center gap-2 font-semibold justify-end md:justify-start",
@@ -169,9 +210,8 @@ export default function Navbar() {
           <span>30-Days Fitness Challenge</span>
           <Info
             className={clsx(
-              "w-5 h-5",
+              "w-5 h-5 cursor-pointer",
               isDark ? "text-gray-400" : "text-gray-500",
-              "cursor-pointer",
             )}
             onClick={() => setShowChallengeSideDrawer(true)}
           />
