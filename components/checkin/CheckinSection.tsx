@@ -43,7 +43,6 @@ export default function CheckInSection() {
       }`}
     >
       <div className="max-w-3xl mx-auto space-y-8">
-        {/* Today's Checkin */}
         <CheckInInput />
 
         {/* Shared Section */}

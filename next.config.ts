@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "haquerealestateapp.s3.ap-south-1.amazonaws.com",
       },
+      {
+        protocol: "https",
+        hostname: "**.s3.ap-south-1.amazonaws.com",
+      },
     ],
   },
 };
