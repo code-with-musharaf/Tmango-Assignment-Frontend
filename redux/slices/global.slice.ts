@@ -12,6 +12,7 @@ export interface IGlobalState {
     completed: boolean;
     selected: boolean;
   } | null;
+  refetchValue: string | null;
 }
 
 const initialState: IGlobalState = {
@@ -20,6 +21,7 @@ const initialState: IGlobalState = {
   userDetails: null,
   selectedDay: 1,
   selectedDayData: null,
+  refetchValue: null,
 };
 
 export const globalSlice = createSlice({
@@ -42,6 +44,9 @@ export const globalSlice = createSlice({
     setSelectedDayData: (state, { payload }: PayloadAction<any>) => {
       state.selectedDayData = payload;
     },
+    setRefetchValue: (state, { payload }: PayloadAction<string>) => {
+      state.refetchValue = payload;
+    },
   },
 });
 
@@ -51,6 +56,7 @@ export const {
   setUserDetails,
   setSelectedDay,
   setSelectedDayData,
+  setRefetchValue,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

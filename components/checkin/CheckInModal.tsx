@@ -1,7 +1,8 @@
 "use client";
 
 import { useApi } from "@/hooks/useApi";
-import { useAppSelector } from "@/hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
+import { setRefetchValue } from "@/redux/slices/global.slice";
 import clsx from "clsx";
 import EmojiPicker, { Theme } from "emoji-picker-react";
 import {
@@ -24,8 +25,9 @@ interface Props {
 export default function CheckInModal({ isOpen, onClose }: Props) {
   const { theme, selectedDay } = useAppSelector((state) => state.global);
   const { submitCheckin } = useApi();
-  const isDark = theme === "dark";
+  const dispatch = useAppDispatch();
 
+  const isDark = theme === "dark";
   const [loading, setLoading] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
   const [media, setMedia] = useState<File | null>(null);
@@ -58,6 +60,7 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
 
     // Reset previous error
     setError(null);
+    console.log({ type: file.type, size: file.size });
 
     // Validate video size
     if (file.type.startsWith("video/")) {
@@ -81,20 +84,17 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
     setPreview(previewUrl);
 
     // Only convert small images to base64 (avoid video base64)
-    if (file.type.startsWith("image/")) {
-      const reader = new FileReader();
+    const reader = new FileReader();
 
-      reader.onload = (e) => {
-        if (e.target?.result) {
-          setBase64(e.target.result as string);
-        }
-      };
+    reader.onload = (e) => {
+      if (e.target?.result) {
+        setBase64(e.target.result as string);
+      }
+    };
 
-      reader.readAsDataURL(file);
-    } else {
-      setBase64(null); // never convert video to base64
-    }
+    reader.readAsDataURL(file);
   };
+
   const toggleVideo = () => {
     if (!videoRef.current) return;
 
@@ -118,18 +118,24 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
         title: text,
         description: "",
         dayCount: selectedDay,
-        assetType: "image",
+        assetType: media?.type.startsWith("video")
+          ? "video"
+          : media?.type.startsWith("image")
+            ? "image"
+            : null,
         assetLink: base64,
       };
       const resp = await submitCheckin(data);
       console.log(resp);
       onClose();
+      dispatch(setRefetchValue("sidebar"));
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
       {/* Backdrop */}

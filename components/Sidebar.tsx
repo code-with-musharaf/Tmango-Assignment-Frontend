@@ -53,7 +53,7 @@ const initialDaysData: DayItem[] = [
 ];
 
 export default function ChallengeSidebar() {
-  const theme = useAppSelector((state) => state.global.theme);
+  const { theme, refetchValue } = useAppSelector((state) => state.global);
   const { getAllSubmission } = useApi();
   const dispatch = useAppDispatch();
 
@@ -143,7 +143,7 @@ export default function ChallengeSidebar() {
 
   useEffect(() => {
     fetchSubmissions();
-  }, []);
+  }, [refetchValue === "sidebar"]);
 
   const handleDayChange = (dayValue: number) => {
     const chosenDay = daysData.find((item) => {
