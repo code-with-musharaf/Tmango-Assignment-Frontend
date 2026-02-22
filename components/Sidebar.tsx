@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { useApi } from "@/hooks/useApi";
 import {
   setGlobalLoading,
+  setRefetchValue,
   setSelectedDay,
   setSelectedDayData,
 } from "@/redux/slices/global.slice";
@@ -53,7 +54,9 @@ const initialDaysData: DayItem[] = [
 ];
 
 export default function ChallengeSidebar() {
-  const { theme, refetchValue } = useAppSelector((state) => state.global);
+  const { theme, refetchValue, selectedDay } = useAppSelector(
+    (state) => state.global,
+  );
   const { getAllSubmission } = useApi();
   const dispatch = useAppDispatch();
 
@@ -108,17 +111,10 @@ export default function ChallengeSidebar() {
     if (completedDays.length > 2) {
       completedDays = completedDays.slice(-2);
     }
-
     setDayData([...completedDays, nextDay, ...incompletedDays]);
+
     if (nextDay?.day) dispatch(setSelectedDay(nextDay?.day));
-    // setDayData((prev) => {
-    //   return prev.map((item) => {
-    //     if (item.day <= completeDayCount + 1) {
-    //       return { ...item, locked: false };
-    //     }
-    //     return item;
-    //   });
-    // });
+    dispatch(setRefetchValue(""));
   };
 
   const fetchSubmissions = async () => {
@@ -143,9 +139,19 @@ export default function ChallengeSidebar() {
 
   useEffect(() => {
     fetchSubmissions();
-  }, [refetchValue === "sidebar"]);
+  }, []);
 
-  const handleDayChange = (dayValue: number) => {
+  useEffect(() => {
+    if (refetchValue === "sidebar") {
+      handleDayChange(selectedDay, true, true);
+    }
+  }, [refetchValue]);
+
+  const handleDayChange = (
+    dayValue: number,
+    completed = false,
+    makeNextDayActive = false,
+  ) => {
     const chosenDay = daysData.find((item) => {
       return item.day === dayValue;
     });
@@ -154,17 +160,47 @@ export default function ChallengeSidebar() {
     }
     setActiveDay(dayValue);
     dispatch(setSelectedDay(dayValue));
-    dispatch(setSelectedDayData(chosenDay));
-    setDayData((prev) => {
-      return prev
-        .map((item) => ({ ...item, selected: false }))
-        .map((item) => {
-          if (item.day === dayValue) {
-            return { ...item, selected: true };
-          }
-          return item;
-        });
-    });
+    dispatch(
+      setSelectedDayData({
+        ...chosenDay,
+        completed: completed ? completed : chosenDay?.completed,
+      }),
+    );
+
+    if (makeNextDayActive) {
+      setDayData((prev) => {
+        return prev
+          .map((item) => ({ ...item, selected: false }))
+          .map((item) => {
+            if (item.day === dayValue) {
+              return {
+                ...item,
+                selected: true,
+                completed: completed ? completed : item.completed,
+              };
+            }
+            if (item.day === dayValue + 1) {
+              return { ...item, locked: false };
+            }
+            return item;
+          });
+      });
+    } else {
+      setDayData((prev) => {
+        return prev
+          .map((item) => ({ ...item, selected: false }))
+          .map((item) => {
+            if (item.day === dayValue) {
+              return {
+                ...item,
+                selected: true,
+                completed: completed ? completed : item.completed,
+              };
+            }
+            return item;
+          });
+      });
+    }
   };
   return (
     <>

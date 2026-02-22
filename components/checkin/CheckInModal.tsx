@@ -114,7 +114,7 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
   // handle submit chekin
   const handleSubmit = async () => {
     try {
-      setLoading;
+      setLoading(true);
       const data = {
         title: text,
         description: "",
@@ -126,12 +126,12 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
             : null,
         assetLink: base64,
       };
-      const resp = await submitCheckin(data);
+      await submitCheckin(data);
       onClose();
       dispatch(setRefetchValue("sidebar"));
       setTimeout(() => {
         dispatch(setRefetchValue(""));
-      }, 2000);
+      }, 5000);
     } catch (err) {
       console.log(err);
     } finally {

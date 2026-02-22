@@ -10,7 +10,7 @@ import { useApi } from "@/hooks/useApi";
 import { useEffect, useState } from "react";
 
 export default function CheckInSection() {
-  const { theme, loading, selectedDay } = useAppSelector(
+  const { theme, loading, selectedDay, refetchValue } = useAppSelector(
     (state) => state.global,
   );
   const isDark = theme === "dark";
@@ -34,7 +34,7 @@ export default function CheckInSection() {
 
   useEffect(() => {
     fetchSubmissions();
-  }, [selectedDay]);
+  }, [selectedDay, refetchValue === "sidebar"]);
 
   return (
     <div
