@@ -7,6 +7,7 @@ import clsx from "clsx";
 import EmojiPicker, { Theme } from "emoji-picker-react";
 import {
   Image as ImageIcon,
+  Loader2,
   Pause,
   Play,
   Smile,
@@ -126,9 +127,11 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
         assetLink: base64,
       };
       const resp = await submitCheckin(data);
-      console.log(resp);
       onClose();
       dispatch(setRefetchValue("sidebar"));
+      setTimeout(() => {
+        dispatch(setRefetchValue(""));
+      }, 2000);
     } catch (err) {
       console.log(err);
     } finally {
@@ -290,7 +293,7 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
           </div>
 
           <button
-            disabled={!isSubmitEnabled}
+            disabled={!isSubmitEnabled || loading}
             className={clsx(
               "px-6 py-3 rounded-full font-semibold transition",
               isSubmitEnabled
@@ -299,7 +302,14 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
             )}
             onClick={handleSubmit}
           >
-            Submit Checkin
+            {loading ? (
+              <div className="flex justify-center">
+                {" "}
+                <Loader2 className="animate-spin w-4 h-4" />
+              </div>
+            ) : (
+              " Submit Checkin"
+            )}
           </button>
         </div>
 
