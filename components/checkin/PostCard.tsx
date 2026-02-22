@@ -97,7 +97,11 @@ export default function PostCard({ pinned, data }: Props) {
             />
           )}
           {data.assetType === "video" && (
-            <video src={data.assetLink} controls className="rounded-lg" />
+            <video
+              src={data.assetLink}
+              controls
+              className="rounded-lg w-[600px] h-[600px]"
+            />
           )}
         </div>
       )}
