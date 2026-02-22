@@ -11,7 +11,6 @@ import ChallengeSidebar from "./Sidebar";
 const LandingPage = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(true);
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
   const dispatch = useAppDispatch();
 
@@ -30,14 +29,8 @@ const LandingPage = () => {
     <>
       <ChallengeModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
       <div className="flex">
-        <ChallengeSidebar
-          selectedDay={selectedDay}
-          setSelectedDay={setSelectedDay}
-        />
-        <CheckInSection
-          selectedDay={selectedDay}
-          setSelectedDay={setSelectedDay}
-        />
+        <ChallengeSidebar />
+        <CheckInSection />
       </div>
     </>
   );

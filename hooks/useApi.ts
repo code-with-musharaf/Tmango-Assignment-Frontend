@@ -83,11 +83,21 @@ export const useApi = () => {
       method: "GET",
     });
   };
+
+  const submitCheckin = async (data: any) => {
+    const challengeId = `699989ed6c01db1dbc3fe6d4`;
+    return httpClient({
+      endPoint: `challenge/submission/${challengeId}`,
+      method: "POST",
+      data,
+    });
+  };
   return {
     login,
     getAllSubmission,
     cheChallengeJoinedOrnot,
     requestToJoinChallenge,
     getSubmisionOfTheDay,
+    submitCheckin,
   };
 };

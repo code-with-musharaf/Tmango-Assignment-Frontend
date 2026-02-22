@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { useApi } from "@/hooks/useApi";
-import { setGlobalLoading } from "@/redux/slices/global.slice";
+import { setGlobalLoading, setSelectedDay } from "@/redux/slices/global.slice";
 import SidebarSkeleton from "./SidebarSkeleton";
 
 interface DayItem {
@@ -48,13 +48,7 @@ const initialDaysData: DayItem[] = [
   { day: 30, locked: true, completed: false, selected: false },
 ];
 
-export default function ChallengeSidebar({
-  selectedDay,
-  setSelectedDay,
-}: {
-  selectedDay: number | null;
-  setSelectedDay: (day: number) => void;
-}) {
+export default function ChallengeSidebar() {
   const theme = useAppSelector((state) => state.global.theme);
   const { getAllSubmission } = useApi();
   const dispatch = useAppDispatch();
@@ -112,7 +106,7 @@ export default function ChallengeSidebar({
     }
 
     setDayData([...completedDays, nextDay, ...incompletedDays]);
-
+    if (nextDay?.day) dispatch(setSelectedDay(nextDay?.day));
     // setDayData((prev) => {
     //   return prev.map((item) => {
     //     if (item.day <= completeDayCount + 1) {
@@ -155,7 +149,7 @@ export default function ChallengeSidebar({
       return;
     }
     setActiveDay(dayValue);
-    setSelectedDay(dayValue);
+    dispatch(setSelectedDay(dayValue));
     setDayData((prev) => {
       return prev
         .map((item) => ({ ...item, selected: false }))

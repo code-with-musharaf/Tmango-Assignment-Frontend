@@ -1,5 +1,6 @@
 "use client";
 
+import { useApi } from "@/hooks/useApi";
 import { useAppSelector } from "@/hooks/useRedux";
 import clsx from "clsx";
 import EmojiPicker, { Theme } from "emoji-picker-react";
@@ -13,7 +14,7 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 interface Props {
   isOpen: boolean;
@@ -21,10 +22,12 @@ interface Props {
 }
 
 export default function CheckInModal({ isOpen, onClose }: Props) {
-  const theme = useAppSelector((state) => state.global.theme);
+  const { theme, selectedDay } = useAppSelector((state) => state.global);
+  const { submitCheckin } = useApi();
   const isDark = theme === "dark";
 
-  const [text, setText] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [text, setText] = useState<string>("");
   const [media, setMedia] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [showEmoji, setShowEmoji] = useState(false);
@@ -105,9 +108,28 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
   };
 
   const isVideo = media?.type.startsWith("video");
-
   const isSubmitEnabled = text.length > 0 || media;
 
+  // handle submit chekin
+  const handleSubmit = async () => {
+    try {
+      setLoading;
+      const data = {
+        title: text,
+        description: "",
+        dayCount: selectedDay,
+        assetType: "image",
+        assetLink: base64,
+      };
+      const resp = await submitCheckin(data);
+      console.log(resp);
+      onClose();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
       {/* Backdrop */}
@@ -269,6 +291,7 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
                 ? "bg-yellow-600 hover:bg-yellow-500 text-white"
                 : "bg-gray-400 text-gray-200 cursor-not-allowed",
             )}
+            onClick={handleSubmit}
           >
             Submit Checkin
           </button>
