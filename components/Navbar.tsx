@@ -42,6 +42,7 @@ export default function Navbar() {
   const handleLogout = () => {
     setShowProfileMenu(false);
     localStorage.removeItem("token");
+    localStorage.clear();
     router.push("/auth");
   };
 
