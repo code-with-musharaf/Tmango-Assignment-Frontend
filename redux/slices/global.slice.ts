@@ -6,6 +6,12 @@ export interface IGlobalState {
   loading: boolean;
   userDetails: any;
   selectedDay: number;
+  selectedDayData: {
+    day: number;
+    locked: boolean;
+    completed: boolean;
+    selected: boolean;
+  } | null;
 }
 
 const initialState: IGlobalState = {
@@ -13,6 +19,7 @@ const initialState: IGlobalState = {
   loading: false,
   userDetails: null,
   selectedDay: 1,
+  selectedDayData: null,
 };
 
 export const globalSlice = createSlice({
@@ -32,10 +39,18 @@ export const globalSlice = createSlice({
     setSelectedDay: (state, { payload }: PayloadAction<number>) => {
       state.selectedDay = payload;
     },
+    setSelectedDayData: (state, { payload }: PayloadAction<any>) => {
+      state.selectedDayData = payload;
+    },
   },
 });
 
-export const { setTheme, setGlobalLoading, setUserDetails, setSelectedDay } =
-  globalSlice.actions;
+export const {
+  setTheme,
+  setGlobalLoading,
+  setUserDetails,
+  setSelectedDay,
+  setSelectedDayData,
+} = globalSlice.actions;
 
 export default globalSlice.reducer;

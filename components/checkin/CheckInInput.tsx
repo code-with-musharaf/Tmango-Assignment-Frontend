@@ -5,9 +5,10 @@ import Image from "next/image";
 import { useState } from "react";
 import CheckInModal from "./CheckInModal";
 import CheckinCountDown from "./CheckinCountDown";
+import { Check } from "lucide-react";
 
 export default function CheckInInput() {
-  const theme = useAppSelector((state) => state.global.theme);
+  const { theme, selectedDayData } = useAppSelector((state) => state.global);
   const isDark = theme === "dark";
   const [showCheckInModal, setShowCheckInModal] = useState(false);
 
@@ -19,7 +20,14 @@ export default function CheckInInput() {
           onClose={() => setShowCheckInModal(false)}
         />
       )}
-      <CheckinCountDown />
+      {!selectedDayData?.completed ? (
+        <CheckinCountDown />
+      ) : (
+        <div className="text-center text-green-500 flex items-center justify-center">
+          <p> Congratulations You Already Checked In </p>{" "}
+          <Check className="ml-2" />
+        </div>
+      )}
 
       <div
         className={`flex items-center gap-4 px-4 py-3 rounded-full border transition ${
@@ -28,6 +36,9 @@ export default function CheckInInput() {
             : "bg-white border-yellow-500"
         }`}
         onClick={() => setShowCheckInModal(true)}
+        style={{
+          display: selectedDayData?.completed ? "none" : "flex",
+        }}
       >
         <Image
           src="/assets/profile.jpg"

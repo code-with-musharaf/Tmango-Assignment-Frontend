@@ -5,7 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { useApi } from "@/hooks/useApi";
-import { setGlobalLoading, setSelectedDay } from "@/redux/slices/global.slice";
+import {
+  setGlobalLoading,
+  setSelectedDay,
+  setSelectedDayData,
+} from "@/redux/slices/global.slice";
 import SidebarSkeleton from "./SidebarSkeleton";
 
 interface DayItem {
@@ -150,6 +154,7 @@ export default function ChallengeSidebar() {
     }
     setActiveDay(dayValue);
     dispatch(setSelectedDay(dayValue));
+    dispatch(setSelectedDayData(chosenDay));
     setDayData((prev) => {
       return prev
         .map((item) => ({ ...item, selected: false }))
