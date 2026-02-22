@@ -130,6 +130,8 @@ export default function ChallengeSidebar({
       if (resp?.length > 0) {
         const lastSubmissionDayCount = resp?.[0]?.dayCount;
         handleUnlockDay(lastSubmissionDayCount);
+      } else {
+        handleUnlockDay(0);
       }
     } catch (err) {
       console.log(err);
