@@ -10,7 +10,7 @@ import ChallengeDrawer from "./ChallengeDrawer";
 import { useRouter } from "next/navigation";
 
 export default function Navbar() {
-  const theme = useAppSelector((state) => state.global.theme);
+  const { theme, selectedDay } = useAppSelector((state) => state.global);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -197,7 +197,7 @@ export default function Navbar() {
               isDark ? "text-white" : "text-gray-900",
             )}
           >
-            Day 1 of 30
+            Day {selectedDay ?? 1} of 30
           </div>
         </div>
 
