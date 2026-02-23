@@ -24,7 +24,9 @@ interface Props {
 }
 
 export default function CheckInModal({ isOpen, onClose }: Props) {
-  const { theme, selectedDay } = useAppSelector((state) => state.global);
+  const { theme, selectedDay, userDetails } = useAppSelector(
+    (state) => state.global,
+  );
   const { submitCheckin } = useApi();
   const dispatch = useAppDispatch();
 
@@ -181,7 +183,9 @@ export default function CheckInModal({ isOpen, onClose }: Props) {
             className="rounded-full"
           />
           <div>
-            <h3 className="text-xl font-semibold">Musharaf Haque</h3>
+            <h3 className="text-xl font-semibold">
+              {userDetails?.name ?? "Musharaf Haque"}
+            </h3>
             {!text && (
               <p className="opacity-60 mt-1">What did you complete today?</p>
             )}

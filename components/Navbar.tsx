@@ -44,6 +44,7 @@ export default function Navbar() {
     localStorage.removeItem("token");
     localStorage.clear();
     router.push("/auth");
+    window.location.reload();
   };
 
   return (
