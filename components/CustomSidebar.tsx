@@ -289,7 +289,7 @@ export default function CustomSideBar() {
             isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
             theme === "dark"
               ? "bg-gradient-to-r from-[#4F606F] via-[#323D44] to-[#121416]"
-              : "bg-gradient-to-b from-gray-200 via-gray-100 to-gray-200 border-gray-300",
+              : "bg-gradient-to-r from-[#C3D1E0] via-[#D5DBE8] to-[#E8E7F0] border-gray-300",
           )}
         >
           <div className="flex justify-between items-center px-4 py-5 sm:hidden">
@@ -371,7 +371,7 @@ export default function CustomSideBar() {
             isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
             theme === "dark"
               ? "bg-gradient-to-r from-[#4F606F] via-[#323D44] to-[#121416]"
-              : "bg-gradient-to-r from-gray-200 via-white-100 to-[#F3F4F6]  ",
+              : "bg-gradient-to-r from-[#C3D1E0] via-[#D5DBE8] to-[#E8E7F0] ",
           )}
         >
           {/* // scroll section  */}
@@ -440,7 +440,7 @@ export default function CustomSideBar() {
             isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
             theme === "dark"
               ? "bg-gradient-to-r from-[#4F606F] via-[#323D44] to-[#121416]"
-              : "bg-gradient-to-b from-gray-200 via-gray-100 to-gray-200 border-gray-300",
+              : "bg-gradient-to-r from-[#C3D1E0] via-[#D5DBE8] to-[#E8E7F0] border-gray-300",
           )}
         >
           {/* // scroll section  */}
