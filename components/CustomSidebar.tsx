@@ -244,6 +244,9 @@ export default function CustomSideBar() {
     });
     setDayData(allDayData);
 
+    if (completed) {
+      chosenDay!.completed = true;
+    }
     const index = allDayData.findIndex((item) => item.day === dayValue);
     if (index === -1) {
       return;
