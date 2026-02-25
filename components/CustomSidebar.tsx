@@ -413,7 +413,7 @@ export default function CustomSideBar() {
 
                   {/* Right Icon */}
                   {selectedDayValue.completed && (
-                    <div className="w-6 h-6 flex items-center justify-center rounded-full bg-green-500">
+                    <div className="w-6 h-6 flex items-center justify-center rounded-full bg-green-500 relative right-2">
                       <Check className="w-4 h-4 text-white" />
                     </div>
                   )}
