@@ -285,7 +285,7 @@ export default function CustomSideBar() {
         {/* // Desktop side bar fro completed days */}
         <div
           className={clsx(
-            "fixed sm:static top-0 left-0 h-fit rounded-br-3xl overflow-auto w-[400px] border-r backdrop-blur-xl transition-transform duration-300 z-50 md:z-10",
+            "fixed sm:static top-0 left-0 h-fit rounded-br-3xl overflow-auto w-[350px] border-r backdrop-blur-xl transition-transform duration-300 z-50 md:z-10",
             isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
             theme === "dark"
               ? "bg-gradient-to-r from-[#4F606F] via-[#323D44] to-[#121416]"
@@ -367,7 +367,7 @@ export default function CustomSideBar() {
         {/* // Selected Day Section  */}
         <div
           className={clsx(
-            "fixed  sm:static top-0 left-0 h-fit rounded-none overflow-auto w-[377px] border-r-none   transition-transform duration-300 z-50 md:z-10 bg-black",
+            "fixed  sm:static top-0 left-0 h-fit rounded-none overflow-auto w-[330px] border-r-none   transition-transform duration-300 z-50 md:z-10 bg-black",
             isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
             theme === "dark"
               ? "bg-gradient-to-r from-[#4F606F] via-[#323D44] to-[#121416]"
@@ -436,22 +436,13 @@ export default function CustomSideBar() {
         {/* // Another Section  fro incompleted days*/}
         <div
           className={clsx(
-            "fixed sm:static top-0 left-0 h-fit rounded-tr-2xl overflow-auto w-[400px] border-r backdrop-blur-xl transition-transform duration-300 z-50 md:z-10",
+            "fixed sm:static top-0 left-0 h-fit rounded-tr-2xl overflow-auto w-[350px] border-r backdrop-blur-xl transition-transform duration-300 z-50 md:z-10",
             isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
             theme === "dark"
               ? "bg-gradient-to-r from-[#4F606F] via-[#323D44] to-[#121416]"
               : "bg-gradient-to-b from-gray-200 via-gray-100 to-gray-200 border-gray-300",
           )}
         >
-          <div className="flex justify-between items-center px-4 py-5 sm:hidden">
-            <h2 className="font-semibold text-gray-800 dark:text-white">
-              Challenge Days
-            </h2>
-            <button onClick={() => setIsOpen(false)}>
-              <X className="w-5 h-5 text-gray-800 dark:text-white" />
-            </button>
-          </div>
-
           {/* // scroll section  */}
           <div
             ref={scrollRef}
