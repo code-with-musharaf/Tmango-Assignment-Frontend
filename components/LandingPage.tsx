@@ -7,6 +7,8 @@ import { setTheme } from "@/redux/slices/global.slice";
 import CheckInSection from "./checkin/CheckinSection";
 import { useRouter } from "next/navigation";
 import ChallengeSidebar from "./Sidebar";
+import NewChallengeSidebar from "./NewSidebar";
+import CustomSideBar from "./CustomSidebar";
 
 const LandingPage = () => {
   const router = useRouter();
@@ -29,7 +31,9 @@ const LandingPage = () => {
     <>
       <ChallengeModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
       <div className="flex">
-        <ChallengeSidebar />
+        {/* <ChallengeSidebar /> */}
+        <CustomSideBar />
+        {/* <NewChallengeSidebar /> */}
         <CheckInSection />
       </div>
     </>

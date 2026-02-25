@@ -256,8 +256,8 @@ export default function ChallengeSidebar() {
                     "flex items-center justify-between px-6 py-4 rounded-full cursor-pointer transition-all duration-300",
                     item.selected &&
                       (theme === "dark"
-                        ? "bg-black shadow-lg"
-                        : "bg-white shadow-md"),
+                        ? "bg-black shadow-lg border-2 border-red-500 absolute w-[100%] rounded-r-none"
+                        : "bg-white shadow-md absolute w-[100%] rounded-r-none"),
                     !item.selected &&
                       (theme === "dark"
                         ? "hover:bg-white/5"
