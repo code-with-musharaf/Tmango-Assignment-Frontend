@@ -18,20 +18,10 @@ body {
   border-top-right-radius: -1000px !important;
 }
 
-.concave-top-right {
-  -webkit-mask-image: radial-gradient(
-    circle 20px at top right,
-    transparent 20px,
-    black 21px
-  );
-  mask-image: radial-gradient(
-    circle 20px at top right,
-    transparent 20px,
-    black 21px
-  );
+
+
+.dark{
+  background-color: black !important;
 }
 
 
-.clip-custom {
-  clip-path: path("M0 0 H100% V90% Q100% 100% 90% 100% H0 Z");
-}

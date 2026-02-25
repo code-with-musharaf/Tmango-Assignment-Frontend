@@ -37,6 +37,11 @@ export default function Navbar() {
 
   const toggleTheme = () => {
     dispatch(globalSetTheme(isDark ? "light" : "dark"));
+    if (!isDark) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
   };
 
   const handleLogout = () => {

@@ -285,7 +285,7 @@ export default function CustomSideBar() {
             "fixed sm:static top-0 left-0 h-fit rounded-br-3xl overflow-auto w-[400px] border-r backdrop-blur-xl transition-transform duration-300 z-50 md:z-10",
             isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
             theme === "dark"
-              ? "bg-gradient-to-b from-[#0f0f0f] via-[#111] to-[#0d0d0d] border-gray-800"
+              ? "bg-gradient-to-r from-[#4F606F] via-[#323D44] to-[#121416]"
               : "bg-gradient-to-b from-gray-200 via-gray-100 to-gray-200 border-gray-300",
           )}
         >
@@ -367,7 +367,7 @@ export default function CustomSideBar() {
             "fixed  sm:static top-0 left-0 h-fit rounded-none overflow-auto w-[377px] border-r-none   transition-transform duration-300 z-50 md:z-10 bg-black",
             isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
             theme === "dark"
-              ? "bg-gradient-to-r from-[#0f0f0f] via-[#111] to-[#0d0d0d] w-[400px] "
+              ? "bg-gradient-to-r from-[#4F606F] via-[#323D44] to-[#121416]"
               : "bg-gradient-to-r from-gray-200 via-white-100 to-[#F3F4F6]  ",
           )}
         >
@@ -384,7 +384,7 @@ export default function CustomSideBar() {
                   className={clsx(
                     "flex items-center px-6 py-4 rounded-full cursor-pointer transition-all duration-300",
                     theme === "dark"
-                      ? " rounded-r-none relative left-4  from-[#0f0f0f] via-[#111] to-[#0d0d0d]"
+                      ? " rounded-r-none relative left-4  bg-black"
                       : " rounded-r-none relative  left-4 bg-gradient-to-r from-white via-white to-[#F3F4F6]",
                     selectedDayValue.completed && "justify-between",
                   )}
@@ -436,7 +436,7 @@ export default function CustomSideBar() {
             "fixed sm:static top-0 left-0 h-fit rounded-tr-2xl overflow-auto w-[400px] border-r backdrop-blur-xl transition-transform duration-300 z-50 md:z-10",
             isOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0",
             theme === "dark"
-              ? "bg-gradient-to-b from-[#0f0f0f] via-[#111] to-[#0d0d0d] border-gray-800"
+              ? "bg-gradient-to-r from-[#4F606F] via-[#323D44] to-[#121416]"
               : "bg-gradient-to-b from-gray-200 via-gray-100 to-gray-200 border-gray-300",
           )}
         >
